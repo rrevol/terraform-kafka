@@ -29,7 +29,7 @@ data "template_file" "zookeeper-ctl" {
 
 data template_file "setup-kafka" {
   template = "${file("${path.module}/scripts/setup-kafka.sh")}"
-  count = "${data.aws_subnet.subnet.count}"
+  count = "${var.deploy_kafka_cluster=="false"?0:data.aws_subnet.subnet.count}"
   vars {
     repo = "${var.kafka_repo}"
     version = "${var.kafka_version}"

@@ -6,7 +6,15 @@ variable "region" {
   type = "string"
 }
 
-variable "environment" {
+variable "team" {
+  type = "string"
+}
+
+variable "project" {
+  type = "string"
+}
+
+variable "platform" {
   type = "string"
 }
 
@@ -25,6 +33,8 @@ variable "key_name" {
 variable "availability_zones" {
   type = "list"
 }
+
+variable "availability_zones_nb" {}
 
 variable "cidr_vpc" {
   type = "string"

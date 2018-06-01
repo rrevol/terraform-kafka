@@ -19,7 +19,7 @@ resource "aws_eip" "public-ips" {
 
 module "network" {
   source = "git::https://github.com/conrad-mukai/terraform-network.git"
-  environment = "${var.environment}"
+  environment = "${var.team}_${var.project}"
   app_name = "infra"
   cidr_vpc = "${var.cidr_vpc}"
   availability_zones = "${var.availability_zones}"
@@ -35,21 +35,25 @@ module "network" {
 module "kafka_volumes" {
   source = "git::https://github.com/conrad-mukai/terraform-ebs-volume.git"
   volumes_per_az = "${var.brokers_per_az}"
-  environment = "${var.environment}"
+  environment = "${var.team}_${var.project}"
   app_name = "infra"
   role = "kafka"
   availability_zones = "${var.availability_zones}"
-  type = "sc1"
+  type = "st1"
   size = 500
 }
 
 module "kafka" {
   source = ".."
-  environment = "${var.environment}"
-  app_name = "infra"
+  deploy_kafka_cluster = true
+  project = "${var.project}"
+  team = "${var.team}"
+  platform = "${var.platform}"
   ebs_volume_ids = "${module.kafka_volumes.volume_ids}"
   subnet_ids = "${module.network.private_subnet_ids}"
+  subnet_count = "${length(module.network.private_subnet_ids)}"
   static_subnet_ids = "${module.network.static_subnet_ids}"
+  static_subnet_count = "${length(module.network.static_subnet_ids)}"
   security_group_ids = ["${module.network.internal_security_group_id}"]
   iam_instance_profile = "${var.iam_instance_profile}"
   key_name = "${var.key_name}"
@@ -67,4 +71,6 @@ module "kafka" {
   private_key = "${var.private_key_path}"
   bastion_private_key = "${var.bastion_private_key_path}"
   cloudwatch_alarm_arn = "${var.cloudwatch_alarm_arn}"
+  availability_zones = "${var.availability_zones}"
+  availability_zones_nb = "${var.availability_zones}"
 }

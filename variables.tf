@@ -2,20 +2,24 @@
  * Kafka module variables
  */
 
-variable "environment" {
-  type = "string"
-  description = "environment to configure"
+variable "deploy_kafka_cluster" {
+  default = "false"
 }
 
-variable "app_name" {
-  description = "application name"
-  default = "infra"
-}
+variable "project" {}
+variable "platform" {}
+variable "team" {}
 
 variable "brokers_per_az" {
   description = "number of Kafka brokers per AZ"
   default = 1
 }
+
+variable "availability_zones" {
+  type = "list"
+}
+
+variable "availability_zones_nb" {}
 
 variable "zookeeper_addr" {
   type = "string"
@@ -39,7 +43,7 @@ variable "zookeeper_instance_type" {
 
 variable "zookeeper_version" {
   description = "Zookeeper version"
-  default = "3.4.10"
+  default = "3.4.12"
 }
 
 variable "zookeeper_repo" {
@@ -64,12 +68,12 @@ variable "kafka_instance_type" {
 
 variable "kafka_version" {
   description = "Kafka version"
-  default = "0.11.0.0"
+  default = "1.1.0"
 }
 
 variable "scala_version" {
   description = "Scala version used in Kafka package"
-  default = "2.12"
+  default = "2.11"
 }
 
 variable "kafka_repo" {
@@ -107,9 +111,17 @@ variable "subnet_ids" {
   description = "list of subnet IDs"
 }
 
+variable "subnet_count" {
+  description = "length subnet IDs"
+}
+
 variable "static_subnet_ids" {
   type = "list"
   description = "list of subnet IDs for static IPs (/24 CIDR)"
+}
+
+variable "static_subnet_count" {
+  description = "length of subnet IDs for static IPs (/24 CIDR)"
 }
 
 variable "security_group_ids" {
@@ -150,4 +162,5 @@ variable "bastion_private_key" {
 variable "cloudwatch_alarm_arn" {
   type = "string"
   description = "cloudwatch alarm ARN"
+  default = ""
 }
