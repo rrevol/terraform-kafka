@@ -91,9 +91,9 @@ variable "ebs_device_name" {
   default = "/dev/xvdf"
 }
 
-variable "ebs_volume_ids" {
-  type = "list"
-  description = "list of EBS volume IDs"
+variable "ebs_size" {
+  description = "Size of EBS volumes attached to kafka brokers"
+  default = 500
 }
 
 variable "num_partitions" {
